@@ -3,6 +3,7 @@ package br.com.infnet.usuario.service;
 import br.com.infnet.usuario.model.Usuario;
 import br.com.infnet.usuario.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 public class UserService {
 
+    @Qualifier("IUserRepository")
     @Autowired
     IUserRepository userRepository;
 

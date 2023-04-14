@@ -23,6 +23,7 @@ public class TokenService {
                 .withIssuer("user-agenda")
                 .withSubject(userAuth.getIdUser().toString())
                 .withClaim("nome", userAuth.getNome())
+                .withClaim("tipo_usuario", userAuth.getTipoUser())
                 .withExpiresAt(expiration)
                 .sign(algorithm);
     }
@@ -32,9 +33,10 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             DecodedJWT tokenVerified = JWT.require(algorithm).build().verify(token);
             String user = tokenVerified.getClaim("nome").asString();
-            return Map.of("validToken", "true", "user", user);
+            String tipoUser = tokenVerified.getClaim("tipo_usuario").asString();
+            return Map.of("validToken", "true", "user", user, "tipoUser", tipoUser);
         } catch (JWTDecodeException e){
-            return Map.of("validToken", "false", "user", "noData");
+            return Map.of("validToken", "false", "user", "", "tipoUser", "");
         }
     }
 }

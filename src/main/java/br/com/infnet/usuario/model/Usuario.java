@@ -15,7 +15,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @Table(name = "usuario")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_usuario")
 public class Usuario implements Serializable {
+
+    @Column(name = "tipo_usuario", insertable = false, updatable = false)
+    private String tipoUser;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
@@ -33,6 +39,7 @@ public class Usuario implements Serializable {
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
+
     }
 
 }
