@@ -23,22 +23,6 @@ public class AuthController {
     @Autowired
     TokenService tokenService;
 
-    @PostMapping("auth")
-    public ResponseEntity<Map<String, String>> autenticacao(@RequestHeader("Authorization") String authHeader) {
-        String email = getCredentials(authHeader).get("email");
-        String password = getCredentials(authHeader).get("senha");
-        if(email.isEmpty() || password.isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("Error", "Preencha os campos vazios"));
-        }
-        Usuario userAuthorized = authService.logar(email, password);
-        if (userAuthorized == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("Message:", "Email e/ou Senha não encontrado"));
-        }
-        String token = tokenService.generateToken(userAuthorized);
-
-        return ResponseEntity.ok(Map.of("token", token));
-    }
-
     @PostMapping("authAdmin")
     public ResponseEntity<Map<String, String>> autenticacaoAdmin(@RequestHeader("Authorization") String authHeader) {
         String email = getCredentials(authHeader).get("email");
@@ -90,7 +74,6 @@ public class AuthController {
         Map<String, String> isAuthenticated = tokenService.verifyToken(jwt);
         if (isAuthenticated.containsValue("true")) {
             return ResponseEntity.ok(Map.of("validToken", isAuthenticated.get("validToken"),"user", isAuthenticated.get("user"), "tipoUser", isAuthenticated.get("tipoUser")));
-            //return ResponseEntity.ok(Map.of(true, isAuthenticated.get(true)));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("validToken", isAuthenticated.get("validToken"),"data", isAuthenticated.get("user"), "tipoUser", isAuthenticated.get("tipoUser")));
     }
